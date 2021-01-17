@@ -1,4 +1,5 @@
 # Alo Whirled
+This is a quick and dirty project to eventually store articles, tutorials, recipes, and code experiments. Built with a simple implementation of Vue.
 
 ## Project setup
 ```
@@ -19,6 +20,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
