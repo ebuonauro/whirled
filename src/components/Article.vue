@@ -1,28 +1,28 @@
 <template>
-  <div v-if="currentTutorial" class="edit-form">
-    <h4>Tutorial</h4>
+  <div v-if="currentArticle" class="edit-form">
+    <h4>Article</h4>
     <form>
       <div class="form-group">
         <label for="title">Title</label>
         <input type="text" class="form-control" id="title"
-          v-model="currentTutorial.title"
+          v-model="currentArticle.title"
         />
       </div>
       <div class="form-group">
         <label for="description">Description</label>
         <input type="text" class="form-control" id="description"
-          v-model="currentTutorial.description"
+          v-model="currentArticle.description"
         />
       </div>
 
       <div class="form-group">
         <label><strong>Status:</strong></label>
-        {{ currentTutorial.published ? "Published" : "Pending" }}
+        {{ currentArticle.published ? "Published" : "Pending" }}
       </div>
     </form>
 
     <button class="badge badge-primary mr-2"
-      v-if="currentTutorial.published"
+      v-if="currentArticle.published"
       @click="updatePublished(false)"
     >
       UnPublish
@@ -34,13 +34,13 @@
     </button>
 
     <button class="badge badge-danger mr-2"
-      @click="deleteTutorial"
+      @click="deleteArticle"
     >
       Delete
     </button>
 
     <button type="submit" class="badge badge-success"
-      @click="updateTutorial"
+      @click="updateArticle"
     >
       Update
     </button>
@@ -49,26 +49,26 @@
 
   <div v-else>
     <br />
-    <p>Please click on a Tutorial...</p>
+    <p>Please click on a Article...</p>
   </div>
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService";
+import ArticleDataService from "../services/ArticleDataService";
 
 export default {
-  name: "tutorial",
+  name: "article",
   data() {
     return {
-      currentTutorial: null,
+      currentArticle: null,
       message: ''
     };
   },
   methods: {
-    getTutorial(id) {
-      TutorialDataService.get(id)
+    getArticle(id) {
+      ArticleDataService.get(id)
         .then(response => {
-          this.currentTutorial = response.data;
+          this.currentArticle = response.data;
           console.log(response.data);
         })
         .catch(e => {
@@ -78,15 +78,15 @@ export default {
 
     updatePublished(status) {
       var data = {
-        id: this.currentTutorial.id,
-        title: this.currentTutorial.title,
-        description: this.currentTutorial.description,
+        id: this.currentArticle.id,
+        title: this.currentArticle.title,
+        description: this.currentArticle.description,
         published: status
       };
 
-      TutorialDataService.update(this.currentTutorial.id, data)
+      ArticleDataService.update(this.currentArticle.id, data)
         .then(response => {
-          this.currentTutorial.published = status;
+          this.currentArticle.published = status;
           console.log(response.data);
         })
         .catch(e => {
@@ -94,22 +94,22 @@ export default {
         });
     },
 
-    updateTutorial() {
-      TutorialDataService.update(this.currentTutorial.id, this.currentTutorial)
+    updateArticle() {
+      ArticleDataService.update(this.currentArticle.id, this.currentArticle)
         .then(response => {
           console.log(response.data);
-          this.message = 'The tutorial was updated successfully!';
+          this.message = 'The article was updated successfully!';
         })
         .catch(e => {
           console.log(e);
         });
     },
 
-    deleteTutorial() {
-      TutorialDataService.delete(this.currentTutorial.id)
+    deleteArticle() {
+      ArticleDataService.delete(this.currentArticle.id)
         .then(response => {
           console.log(response.data);
-          this.$router.push({ name: "tutorials" });
+          this.$router.push({ name: "articles" });
         })
         .catch(e => {
           console.log(e);
@@ -118,7 +118,7 @@ export default {
   },
   mounted() {
     this.message = '';
-    this.getTutorial(this.$route.params.id);
+    this.getArticle(this.$route.params.id);
   }
 };
 </script>
