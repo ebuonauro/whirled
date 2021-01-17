@@ -2,31 +2,31 @@ import http from "../http-common";
 
 class ArticleDataService {
   getAll() {
-    return http.get("/articles");
+    return http.get("/tutorials");
   }
 
   get(id) {
-    return http.get(`/articles/${id}`);
+    return http.get(`/tutorials/${id}`);
   }
 
   create(data) {
-    return http.post("/articles", data);
+    return http.post("/tutorials", data);
   }
 
   update(id, data) {
-    return http.put(`/articles/${id}`, data);
+    return http.put(`/tutorials/${id}`, data);
   }
 
   delete(id) {
-    return http.delete(`/articles/${id}`);
+    return http.delete(`/tutorials/${id}`);
   }
 
   deleteAll() {
-    return http.delete(`/articles`);
+    return http.delete(`/tutorials`);
   }
 
   findByTitle(title) {
-    return http.get(`/articles?title=${title}`);
+    return http.get(`/tutorials?title=${title}`);
   }
 }
 
