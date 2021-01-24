@@ -1,20 +1,11 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-      <router-link to="/" class="navbar-brand">Home</router-link>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link to="/articles" class="nav-link">Articles</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/add" class="nav-link">Add</router-link>
-        </li>
+    <nav class="navbar navbar-expand">
+      <div class="container">
+        <router-link to="/" class="navbar-brand col">Alo Whirled</router-link>
       </div>
     </nav>
-
-    <div class="container mt-3">
-      <router-view />
-    </div>
+    <router-view />
   </div>
 </template>
 

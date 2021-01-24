@@ -1,57 +1,52 @@
 <template>
-  <div class="list row">
-    <div class="col-md-8">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search by title"
-          v-model="title"/>
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button"
-            @click="searchTitle"
-          >
-            Search
-          </button>
-        </div>
+  <div class="article-list">
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-5 col-6">{{ featuredArticle.title }}</h1>
+        <p class="col-lg-6">{{ featuredArticle.description }}</p>
+        <p class="lead col">
+          <a class="btn btn-primary btn-lg" :href="'/articles/' + featuredArticle.id" role="button">Learn more</a>
+        </p>
       </div>
     </div>
-    <div class="col-md-6">
-      <h4>Articles List</h4>
-      <ul class="list-group">
-        <li class="list-group-item"
-          :class="{ active: index == currentIndex }"
-          v-for="(article, index) in articles"
-          :key="index"
-          @click="setActiveArticle(article, index)"
-        >
-          {{ article.title }}
-        </li>
-      </ul>
-
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllArticles">
-        Remove All
-      </button>
-    </div>
-    <div class="col-md-6">
-      <div v-if="currentArticle">
-        <h4>Article</h4>
-        <div>
-          <label><strong>Title:</strong></label> {{ currentArticle.title }}
+    <div class="list row container">
+      <div class="col-md-12">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Search by title"
+            v-model="title"/>
+          <div class="input-group-append">
+            <button class="btn btn-secondary" type="button"
+              @click="searchTitle">
+              Search
+            </button>
+          </div>
         </div>
-        <div>
-          <label><strong>Description:</strong></label> {{ currentArticle.description }}
-        </div>
-        <div>
-          <label><strong>Status:</strong></label> {{ currentArticle.published ? "Published" : "Pending" }}
-        </div>
-
-        <a class="badge badge-warning"
-          :href="'/articles/' + currentArticle.id"
-        >
-          Edit
-        </a>
       </div>
-      <div v-else>
-        <br />
-        <p>Please click on a Article...</p>
+      <div class="col-lg-4">
+        <ul class="list-group">
+          <li class="list-group-item"
+            :class="{ active: index == currentIndex }"
+            v-for="(article, index) in articles"
+            :key="index">
+            <a
+              :href="'/articles/' + article.id"
+            >{{ article.title }}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-8 article-container">
+        <div class="card-container row">
+          <div class="card col-lg-6"
+          :class="{ active: index == 2 }"
+            v-for="(article, index) in articles"
+            :key="index">
+          <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">{{ article.description }}</p>
+            <a :href="'/articles/' + article.id" class="stretched-link">Read More</a>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
   </div>
@@ -65,7 +60,8 @@ export default {
   data() {
     return {
       articles: [],
-      currentArticle: null,
+      featuredArticle: "",
+      lastArticleNum: null,
       currentIndex: -1,
       title: ""
     };
@@ -75,7 +71,7 @@ export default {
       ArticleDataService.getAll()
         .then(response => {
           this.articles = response.data;
-          console.log(response.data);
+          this.featuredArticle = response.data[0];
         })
         .catch(e => {
           console.log(e);
@@ -86,22 +82,6 @@ export default {
       this.retrieveArticles();
       this.currentArticle = null;
       this.currentIndex = -1;
-    },
-
-    setActiveArticle(article, index) {
-      this.currentArticle = article;
-      this.currentIndex = index;
-    },
-
-    removeAllArticles() {
-      ArticleDataService.deleteAll()
-        .then(response => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch(e => {
-          console.log(e);
-        });
     },
     
     searchTitle() {
@@ -122,9 +102,41 @@ export default {
 </script>
 
 <style>
+.jumbotron {
+  background-color: #f2f2f2;
+  border-radius: 0;
+  position: relative;
+  margin-bottom: 60px;
+}
+.jumbotron:after {
+  content: '';
+  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+.container {
+  padding: 0;
+}
 .list {
   text-align: left;
-  max-width: 750px;
   margin: auto;
+}
+.card-container {
+  justify-content: space-between;
+}
+.card {
+  flex-basis: calc(50% - 10px);
+  margin-bottom: 20px;
+}
+@media (min-width: 1200px) {
+  .article-container {
+    margin-top: -54px;
+  }
+  .input-group {
+    max-width: 350px;
+  }
 }
 </style>

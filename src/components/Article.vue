@@ -1,55 +1,14 @@
 <template>
-  <div v-if="currentArticle" class="edit-form">
-    <h4>Article</h4>
-    <form>
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title"
-          v-model="currentArticle.title"
-        />
+  <div class="single-article">
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-5 col-6">{{ currentArticle.title }}</h1>
+        <p class="col-lg-6">{{ currentArticle.description }}</p>
       </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description"
-          v-model="currentArticle.description"
-        />
-      </div>
-
-      <div class="form-group">
-        <label><strong>Status:</strong></label>
-        {{ currentArticle.published ? "Published" : "Pending" }}
-      </div>
-    </form>
-
-    <button class="badge badge-primary mr-2"
-      v-if="currentArticle.published"
-      @click="updatePublished(false)"
-    >
-      UnPublish
-    </button>
-    <button v-else class="badge badge-primary mr-2"
-      @click="updatePublished(true)"
-    >
-      Publish
-    </button>
-
-    <button class="badge badge-danger mr-2"
-      @click="deleteArticle"
-    >
-      Delete
-    </button>
-
-    <button type="submit" class="badge badge-success"
-      @click="updateArticle"
-    >
-      Update
-    </button>
-    <p>{{ message }}</p>
-  </div>
-
-  <div v-else>
-    <br />
-    <p>Please click on a Article...</p>
+    </div>
+    <div class="container">
+      <article class="col-md-8 mb-5" v-html="currentArticle.article"></article>
+    </div>
   </div>
 </template>
 
@@ -69,7 +28,6 @@ export default {
       ArticleDataService.get(id)
         .then(response => {
           this.currentArticle = response.data;
-          console.log(response.data);
         })
         .catch(e => {
           console.log(e);
@@ -124,8 +82,21 @@ export default {
 </script>
 
 <style>
-.edit-form {
-  max-width: 300px;
-  margin: auto;
+.jumbotron {
+  background-color: #f2f2f2;
+  border-radius: 0;
+  position: relative;
+  margin-bottom: 60px;
 }
+.jumbotron:after {
+  content: '';
+  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+
 </style>
