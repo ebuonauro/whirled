@@ -16,11 +16,6 @@ export default new Router({
       path: "/articles/:id",
       name: "article-details",
       component: () => import("./components/Article")
-    },
-    {
-      path: "/add",
-      name: "add",
-      component: () => import("./components/AddArticle")
     }
   ]
 });

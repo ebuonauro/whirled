@@ -27,14 +27,13 @@
           <li class="list-group-item"
             :class="{ active: index == currentIndex }"
             v-for="(article, index) in articles"
-            :key="index">
-            <a
-              :href="'/articles/' + article.id"
-            >{{ article.title }}</a>
+            :key="index"
+            @click="setActiveArticle(article, index)">
+            {{ article.title }}
           </li>
         </ul>
       </div>
-      <div class="col-lg-8 article-container">
+      <div v-if="showAllArticles" class="col-lg-8 article-container">
         <div class="card-container row">
           <div class="card col-lg-6"
           :class="{ active: index == 2 }"
@@ -46,6 +45,16 @@
             <a :href="'/articles/' + article.id" class="stretched-link">Read More</a>
           </div>
         </div>
+      </div>
+      </div>
+      <div v-else class="col-lg-8 article-container">
+        <div class="card col-12">
+          <div class="card-body">
+            <h4 class="card-title">{{ currentArticle.title }}</h4>
+            <h6 class="card-subtitle mb-4">{{ currentArticle.description }}</h6>
+            <div class="card-text" v-html="currentArticle.article"></div>
+            <a href="#" @click="refreshList" role="button">Show All Articles</a>
+          </div>
         </div>
       </div>
     </div>
@@ -62,8 +71,10 @@ export default {
       articles: [],
       featuredArticle: "",
       lastArticleNum: null,
+      currentArticle: null,
       currentIndex: -1,
-      title: ""
+      title: "",
+      showAllArticles: true
     };
   },
   methods: {
@@ -82,6 +93,13 @@ export default {
       this.retrieveArticles();
       this.currentArticle = null;
       this.currentIndex = -1;
+      this.showAllArticles = true;
+    },
+
+    setActiveArticle(article, index) {
+      this.currentArticle = article;
+      this.currentIndex = index;
+      this.showAllArticles = false;
     },
     
     searchTitle() {
@@ -93,7 +111,9 @@ export default {
         .catch(e => {
           console.log(e);
         });
-    }
+    },
+
+
   },
   mounted() {
     this.retrieveArticles();
