@@ -2,7 +2,7 @@
   <div class="single-article">
     <div class="jumbotron">
       <div class="container">
-        <h1 class="display-5 col-6">{{ currentArticle.title }}</h1>
+        <h1 class="display-5 col-lg-6">{{ currentArticle.title }}</h1>
         <p class="col-lg-6">{{ currentArticle.description }}</p>
       </div>
     </div>

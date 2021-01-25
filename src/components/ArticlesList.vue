@@ -2,7 +2,7 @@
   <div class="article-list">
     <div class="jumbotron">
       <div class="container">
-        <h1 class="display-5 col-6">{{ featuredArticle.title }}</h1>
+        <h1 class="display-5 col-lg-6">{{ featuredArticle.title }}</h1>
         <p class="col-lg-6">{{ featuredArticle.description }}</p>
         <p class="lead col">
           <a class="btn btn-primary btn-lg" :href="'/articles/' + featuredArticle.id" role="button">Learn more</a>
@@ -10,28 +10,28 @@
       </div>
     </div>
     <div class="list row container">
-      <div class="col-md-12">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Search by title"
-            v-model="title"/>
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="button"
-              @click="searchTitle">
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
       <div class="col-lg-4">
-        <ul class="list-group">
-          <li class="list-group-item"
-            :class="{ active: index == currentIndex }"
-            v-for="(article, index) in articles"
-            :key="index"
-            @click="setActiveArticle(article, index)">
-            {{ article.title }}
-          </li>
-        </ul>
+        <div class="sticky-sidebar" v-sticky='stickyScroll'>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search by title"
+              v-model="title" v-filter />
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="button"
+                @click="searchTitle">
+                Search
+              </button>
+            </div>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item"
+              :class="{ active: index == currentIndex }"
+              v-for="(article, index) in articles"
+              :key="index"
+              @click="setActiveArticle(article, index)">
+              {{ article.title }}
+            </li>
+          </ul>
+        </div>
       </div>
       <div v-if="showAllArticles" class="col-lg-8 article-container">
         <div class="card-container row">
@@ -74,8 +74,30 @@ export default {
       currentArticle: null,
       currentIndex: -1,
       title: "",
-      showAllArticles: true
+      showAllArticles: true,
+      subNavPosFromTop: null,
+      currentPosFromTop: null
     };
+  },
+  directives: {
+    sticky: {
+      inserted: function(el, binding) {
+        let f = function(e) {
+          if (binding.value(e, el)) {
+            window.removeEventListener('scroll', f)
+          }
+        }
+        window.addEventListener('scroll', f)
+      }
+    },
+    filter: {
+      update: function(el) {
+        if (el.value.length > 2) {
+          this.searchTitle();
+        }
+      }
+    }
+
   },
   methods: {
     retrieveArticles() {
@@ -113,12 +135,22 @@ export default {
         });
     },
 
+    stickyScroll(e, el) {
+      if (window.scrollY > 458 && window.innerWidth > 992) {
+        el.style.position = 'fixed';
+        el.style.top = '30px';
+      } else {
+        el.style.position = 'relative';
+        el.style.top = '0px';
+      }
+    }
 
   },
   mounted() {
     this.retrieveArticles();
   }
 };
+
 </script>
 
 <style>
@@ -137,12 +169,18 @@ export default {
   width: 100%;
   height: 20px;
 }
+.active {
+  font-weight: 600;
+}
 .container {
   padding: 0;
 }
 .list {
   text-align: left;
   margin: auto;
+}
+.article-container {
+  min-height: 1200px;
 }
 .card-container {
   justify-content: space-between;
@@ -151,12 +189,23 @@ export default {
   flex-basis: calc(50% - 10px);
   margin-bottom: 20px;
 }
-@media (min-width: 1200px) {
-  .article-container {
-    margin-top: -54px;
+
+.col-lg-4 {
+  margin-bottom: 30px;
+}
+@media (min-width: 992px) {
+  .col-lg-4 {
+    padding: 0 15px;
+    margin-bottom: 0;
   }
-  .input-group {
-    max-width: 350px;
+  .sticky-sidebar {
+    width: 290px;
+    top: 0;
+  }
+}
+@media (min-width: 1200px) {
+  .sticky-sidebar {
+    width: 350px;
   }
 }
 </style>
