@@ -1,0 +1,75 @@
+$primaryBase:  #667eea;
+$secondaryBase: #764ba2;
+$neutralLight: #f2f2f2;
+$neutralDark: #222;
+
+.btn {
+  font-weight: 600;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+  &:before {
+    content: '';
+    width: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 350ms, width 150ms;
+  }
+  span {
+    position: relative;
+    z-index: 2;
+  }
+  &:hover {
+    background-size: 100%;
+    background-repeat: repeat;
+    &:before {
+      opacity: 1;
+      width: 100%;
+      transition: opacity 350ms, width 250ms;
+    }
+  }
+  &-primary {
+    background-image: linear-gradient(135deg, $primaryBase 0%, $primaryBase 100%);
+    color: lighten($neutralLight, 10%);
+    &:before {
+      background-image: linear-gradient(135deg, $primaryBase 0%, $secondaryBase 100%);
+    }
+  }
+  &-secondary {
+    background-image: linear-gradient(90deg, #3F2B96 0%, #3F2B96 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+    color: $neutralLight;
+    position: relative;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+    &:after {
+      content: '';
+      background: linear-gradient(90deg, #3F2B96 0%, #A8C0FF 100%);
+      width: 0;
+      height: 2px;
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      opacity: 0;
+      transition: opacity 350ms, width 350ms;
+    }
+    &:hover {
+      background-image: linear-gradient(90deg, #3F2B96 0%, #A8C0FF 100%);
+      background-size: 100%;
+      background-repeat: repeat;
+      &:after {
+        opacity: 1;
+        width: 100%;
+        transition: opacity 350ms, width 350ms;
+      }
+    }
+  }
+}

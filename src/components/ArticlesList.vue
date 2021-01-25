@@ -3,10 +3,11 @@
     <div class="jumbotron">
       <div class="container">
         <h1 class="display-5 col-lg-6">{{ featuredArticle.title }}</h1>
-        <p class="col-lg-6">{{ featuredArticle.description }}</p>
-        <p class="lead col">
-          <a class="btn btn-primary btn-lg" :href="'/articles/' + featuredArticle.id" role="button">Learn more</a>
+        <p class="col-lg-6">
+          {{ featuredArticle.description }}
+          <a class="btn btn-primary mt-3" :href="'/articles/' + featuredArticle.id" role="button"><span>Read More</span></a>  
         </p>
+        
       </div>
     </div>
     <div class="list row container">
@@ -16,9 +17,9 @@
             <input type="text" class="form-control" placeholder="Search by title"
               v-model="title" v-filter />
             <div class="input-group-append">
-              <button class="btn btn-secondary" type="button"
+              <button class="btn btn-primary" type="button"
                 @click="searchTitle">
-                Search
+                <span>Search</span>
               </button>
             </div>
           </div>
@@ -42,7 +43,7 @@
           <div class="card-body">
             <h5 class="card-title">{{ article.title }}</h5>
             <p class="card-text">{{ article.description }}</p>
-            <a :href="'/articles/' + article.id" class="stretched-link">Read More</a>
+            <a :href="'/articles/' + article.id" class="stretched-link btn-secondary">Read More</a>
           </div>
         </div>
       </div>
@@ -93,7 +94,7 @@ export default {
     filter: {
       update: function(el) {
         if (el.value.length > 2) {
-          this.searchTitle();
+          this.searchTitle(el.value);
         }
       }
     }
@@ -153,16 +154,16 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
 .jumbotron {
-  background-color: #f2f2f2;
+  background-color: $neutralLight;
   border-radius: 0;
   position: relative;
   margin-bottom: 60px;
 }
 .jumbotron:after {
   content: '';
-  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: linear-gradient(135deg, $primaryBase 0%, $secondaryBase 100%);
   position: absolute;
   bottom: -20px;
   left: 0;
