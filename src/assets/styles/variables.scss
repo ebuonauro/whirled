@@ -73,3 +73,27 @@ $neutralDark: #222;
     }
   }
 }
+
+
+.jumbotron {
+  background-color: $neutralLight;
+  border-radius: 0;
+  position: relative;
+  margin-bottom: 60px;
+}
+.jumbotron:after {
+  content: '';
+  background-image: linear-gradient(135deg, $primaryBase 0%, $secondaryBase 100%);
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+.container {
+  padding: 0;
+}
+.card-text {
+  font-weight: 400;
+}
