@@ -2,25 +2,21 @@
   <div class="article-list">
     <div class="jumbotron">
       <div class="container">
+        <span class="label col">Featured Article</span>
         <h1 class="display-5 col-lg-6">{{ featuredArticle.title }}</h1>
-        <p class="col-lg-6">{{ featuredArticle.description }}</p>
-        <p class="lead col">
-          <a class="btn btn-primary btn-lg" :href="'/articles/' + featuredArticle.id" role="button">Learn more</a>
+        <p class="col-lg-6">
+          {{ featuredArticle.description }}
+          <br>
+          <a class="btn btn-primary mt-3" :href="'/articles/' + featuredArticle.id" role="button"><span>Read More</span></a>  
         </p>
+        
       </div>
     </div>
     <div class="list row container">
-      <div class="col-lg-4">
+      <!-- <div class="col-lg-4">
         <div class="sticky-sidebar" v-sticky='stickyScroll'>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search by title"
-              v-model="title" v-filter />
-            <div class="input-group-append">
-              <button class="btn btn-secondary" type="button"
-                @click="searchTitle">
-                Search
-              </button>
-            </div>
+            <input type="text" class="form-control" id="filter"  placeholder="Search by title or description" v-model="filter" />
           </div>
           <ul class="list-group">
             <li class="list-group-item"
@@ -32,17 +28,18 @@
             </li>
           </ul>
         </div>
+      </div> -->
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" id="filter" placeholder="Search by title" v-model="filter" />
       </div>
-      <div v-if="showAllArticles" class="col-lg-8 article-container">
+      <div v-if="showAllArticles" class="col article-container">
         <div class="card-container row">
-          <div class="card col-lg-6"
-          :class="{ active: index == 2 }"
-            v-for="(article, index) in articles"
-            :key="index">
+          <div class="card col-lg-4"
+           v-for="article in filteredArticles" :key="article">
           <div class="card-body">
             <h5 class="card-title">{{ article.title }}</h5>
             <p class="card-text">{{ article.description }}</p>
-            <a :href="'/articles/' + article.id" class="stretched-link">Read More</a>
+            <a :href="'/articles/' + article.id" class="btn-secondary">Read More</a>
           </div>
         </div>
       </div>
@@ -73,11 +70,18 @@ export default {
       lastArticleNum: null,
       currentArticle: null,
       currentIndex: -1,
-      title: "",
+      filter: "",
       showAllArticles: true,
       subNavPosFromTop: null,
       currentPosFromTop: null
     };
+  },
+  computed: {
+    filteredArticles: function () {
+      return this.articles.filter(article => {
+        return article.title.toLowerCase().indexOf(this.filter.toLowerCase()) > -1
+      })
+    }
   },
   directives: {
     sticky: {
@@ -89,22 +93,14 @@ export default {
         }
         window.addEventListener('scroll', f)
       }
-    },
-    filter: {
-      update: function(el) {
-        if (el.value.length > 2) {
-          this.searchTitle();
-        }
-      }
     }
-
   },
   methods: {
     retrieveArticles() {
       ArticleDataService.getAll()
         .then(response => {
           this.articles = response.data;
-          this.featuredArticle = response.data[0];
+          this.featuredArticle = response.data[3];
         })
         .catch(e => {
           console.log(e);
@@ -153,27 +149,13 @@ export default {
 
 </script>
 
-<style>
-.jumbotron {
-  background-color: #f2f2f2;
-  border-radius: 0;
-  position: relative;
-  margin-bottom: 60px;
-}
-.jumbotron:after {
-  content: '';
-  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: absolute;
-  bottom: -20px;
-  left: 0;
-  width: 100%;
-  height: 20px;
-}
+<style lang="scss">
 .active {
   font-weight: 600;
 }
-.container {
-  padding: 0;
+.label {
+  text-transform: uppercase;
+  font-weight: 500;
 }
 .list {
   text-align: left;
@@ -182,22 +164,16 @@ export default {
 .article-container {
   min-height: 1200px;
 }
-.card-container {
-  justify-content: space-between;
-}
 .card {
-  flex-basis: calc(50% - 10px);
-  margin-bottom: 20px;
+  flex-basis: calc(33.333% - 20px);
+  margin: 0 10px;
+  margin-bottom: 15px;
+}
+.input-group {
+  padding: 0 10px;
 }
 
-.col-lg-4 {
-  margin-bottom: 30px;
-}
 @media (min-width: 992px) {
-  .col-lg-4 {
-    padding: 0 15px;
-    margin-bottom: 0;
-  }
   .sticky-sidebar {
     width: 290px;
     top: 0;
