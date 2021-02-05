@@ -1,7 +1,4 @@
 node_modules
 package-lock.json
-dist/css
-dist/js
-dist/favicon.ico
-dist/index.html
+dist
 db.json
